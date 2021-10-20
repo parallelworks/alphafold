@@ -1,13 +1,15 @@
-<tool id='nyu1_alphafold' name='nyu1_alphafold'>
+<tool id='alphafold' name='alphafold'>
   <command interpreter='parsl'>main.py</command>
   <inputs>
-    <param name='sort1' type='data' format='sort'>
+    <param name='casename' label='Case Name' type='text' value='GROMACS' width='30%'>
     </param>
-    <param name='sort2' type='data' format='sort'>
+    <param name='sample_switch' label='(True) / (False)' type='boolean' truevalue='True on left' falsevalue='False on right' width='30%' help='This switch does not do anything!'>
+    </param>
+    <param name='run_files' type='data' multiple='True' label='CHARMM downloads (.tgz)' format='tgz' width='100%'>
     </param>
   </inputs>
   <outputs>
-    <data name='sorted' format='txt' label='${time.strftime("%Y%m%d-%H%M%S", time.gmtime())}.sorted'>
+    <data name='out_dir' format='txt' label='${casename}-out'>
     </data>
   </outputs>
 </tool>
