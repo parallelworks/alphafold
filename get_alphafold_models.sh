@@ -8,6 +8,7 @@
 #SBATCH -t 8:00:00
 
 if [ -z "$fasta_file" ];then
+    echo "Setting fasta_file to $1..."
     fasta_file=$1
 fi
 
@@ -26,7 +27,7 @@ get_out_dir () {
 #debug version
 out_dir=$(get_out_dir $fasta_file)
 if [ -d $out_dir ];then
-    echo "skipping $fasta_file "
+    echo "Skipping $fasta_file b/c already present"
 else
    ./run-alphafold-20210721.sh python ./run_alphafold_fastalign_homooligomer_nseed.py --n_copies 1 --n_models 2 --use_amber $fasta_file
 fi

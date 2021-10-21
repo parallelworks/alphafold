@@ -1,11 +1,11 @@
 <tool id='alphafold' name='alphafold'>
   <command interpreter='parsl'>main.py</command>
   <inputs>
-    <param name='casename' label='Case Name' type='text' value='GROMACS' width='30%'>
+    <param name='casename' label='Case Name' type='text' value='Sample text input' width='30%' help='This field does not do anything!'>
     </param>
     <param name='sample_switch' label='(True) / (False)' type='boolean' truevalue='True on left' falsevalue='False on right' width='30%' help='This switch does not do anything!'>
     </param>
-    <param name='run_files' type='data' multiple='True' label='CHARMM downloads (.tgz)' format='tgz' width='100%'>
+    <param name='run_files' type='data' multiple='True' label='Fasta files (.fasta)' format='fasta' width='100%'>
     </param>
   </inputs>
   <outputs>

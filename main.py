@@ -36,7 +36,12 @@ print("PW config loaded")
 # by Parsl and in parallel.
 
 @bash_app
-def run_alphafold(inputs=[],outputs=[],wrapper_name="get_alphafold_models.sh"):
+def run_alphafold(
+    stdout='af.stdout',
+    stderr='af.stderr',
+    inputs=[],
+    outputs=[],
+    wrapper_name="get_alphafold_models.sh"):
     # Use Python 3.6+ f-strings for concise
     # construction of command to run, see:
     # https://realpython.com/python-f-strings/
@@ -44,28 +49,32 @@ def run_alphafold(inputs=[],outputs=[],wrapper_name="get_alphafold_models.sh"):
     return run_command
 
 #=================================
-# Start the run here
+# Start the workflow here
 #=================================
 
 if __name__ == "__main__":
     import glob
     parsl.set_file_logger('main.py.log', level=logging.DEBUG)
 
-    output_dir = '/pw/storage/test-outputs'
+    #out_dir_name = pwargs.out_dir
+    out_dir_name = 'predictions'
+    out_dir = Path(out_dir_name)
 
     # Create output dir if not already present
-    bash_command = 'mkdir -p '+output_dir
+    bash_command = 'mkdir -p '+out_dir_name
     subprocess.run(bash_command.split())
 
-    # List of run_files is from the PW platform form
+    # List of run_file_names is from the PW platform form
     run_file_names = pwargs.run_files.split('---')
 
     # Initialize list of Parsl app futures
     runs=[]
 
+    # List all .sh and .py files in this workflow directory.
+    # Later, they will be listed as inputs to a Parsl app
+    # which means they will be copied to all workers that
+    # run the Parsl app.
     send_files = [Path(f) for f in glob.glob("*.sh")+glob.glob("*.py")]
-    out_dir_name = pwargs.out_dir
-    out_dir = Path(out_dir_name)
 
     for run_file_name in run_file_names:
 
@@ -73,7 +82,7 @@ if __name__ == "__main__":
 
         r = run_alphafold(
             inputs = [run_file]+send_files,
-            outputs=[out_dir])
+            outputs=[out_dir,Path("af.stdout"),Path("af.stderr")])
         runs.append(r)
 
     print("Running",len(runs),"alphafold executions...")
