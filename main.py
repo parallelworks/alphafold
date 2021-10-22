@@ -7,6 +7,7 @@ import numpy as np
 import os
 import logging # Needed for parsl.set_file_logger
 import subprocess
+from gen_table import gen_table
 
 # Parsl requirements
 import parsl
@@ -97,3 +98,5 @@ if __name__ == "__main__":
 
     print("Running",len(runs),"alphafold executions...")
     [r.result() for r in runs]
+
+    gen_table(pwargs.outcsv,pwargs.outhtml)

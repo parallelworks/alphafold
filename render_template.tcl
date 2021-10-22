@@ -47,14 +47,21 @@ color Axes Labels black
 
 #set pdbfile [lindex $argv 0]
 set pdbfile _PDBFILE_
+puts "Loading pdb file: $pdbfile"
 mol new $pdbfile waitfor all
-display resize 800 800
+puts "Here 1"
+#display resize 800 800
+puts "Here 2"
 display resetview
+puts "Here 3"
 scale by 2
 
 #set namelength [string length $pdbfile]
 #set prefix [string range $pdbfile 0 [expr $namelength - 5]]
 #set prefix [file dirname $pdbfile]/[file rootname [file tail $pdbfile]]
 set prefix _PREFIX_
-render Tachyon $prefix.dat "/share/apps/vmd/1.9.3/lib/vmd/tachyon_LINUXAMD64" -aasamples 12 %s -format TARGA -res 800 800 -o %s.tga
+puts "Rendering to $prefix"
+puts "Running - render Tachyon ${prefix}.dat '/share/apps/vmd/1.9.3/lib/vmd/tachyon_LINUXAMD64' -aasamples 12 %s -format TARGA -res 800 800 -o %s.tga"
+render Tachyon ${prefix}.dat "/share/apps/vmd/1.9.3/lib/vmd/tachyon_LINUXAMD64" -aasamples 12 %s -format TARGA -res 800 800 -o %s.tga
+sleep 1
 exit

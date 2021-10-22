@@ -13,5 +13,9 @@
   <outputs>
     <data name='out_dir' format='txt' label='${casename}-out'>
     </data>
+    <data name='outcsv' format='csv' label='predict_output.csv'>
+    </data>
+    <data name='outhtml' format='html' label='predict_output.html'>
+    </data>
   </outputs>
 </tool>

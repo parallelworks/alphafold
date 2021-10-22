@@ -1,11 +1,11 @@
 #mol new predictions/alphafold_1ubq/1ubq_relaxed_model_1_seed1.pdb waitfor all
 
 ############################################################################
-#cr                                                                       
-#cr            (C) Copyright 1995-2007 The Board of Trustees of the            
-#cr                        University of Illinois                         
-#cr                         All Rights Reserved                           
-#cr                                                                       
+#cr
+#cr            (C) Copyright 1995-2007 The Board of Trustees of the
+#cr                        University of Illinois
+#cr                         All Rights Reserved
+#cr
 ############################################################################
 
 ############################################################################
@@ -47,12 +47,12 @@ color Axes Labels black
 
 set pdbfile [lindex $argv 0]
 mol new $pdbfile waitfor all
-display resize 800 800
+#display resize 800 800
 display resetview
 scale by 2
 
 set namelength [string length $pdbfile]
-set prefix [string range $pdbfile 0 [expr $namelength - 5]]
-
+#set prefix [string range $pdbfile 0 [expr $namelength - 5]]
+set prefix [file dirname $pdbfile]/[file rootname [file tail $pdbfile]]
 render Tachyon $prefix.dat "/share/apps/vmd/1.9.3/lib/vmd/tachyon_LINUXAMD64" -aasamples 12 %s -format TARGA -res 800 800 -o %s.tga
 exit
