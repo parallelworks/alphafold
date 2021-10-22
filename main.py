@@ -43,7 +43,7 @@ def run_alphafold(
     inputs=[],
     outputs=[],
     wrapper_name="get_alphafold_models.sh",
-    render_script="render.greene.sh"):
+    render_script="render_v2.greene.sh"):
     # Use Python 3.6+ f-strings for concise
     # construction of command to run, see:
     # https://realpython.com/python-f-strings/
