@@ -37,6 +37,7 @@ print("PW config loaded")
 
 @bash_app
 def run_alphafold(
+    random_seed=1,
     stdout='af.stdout',
     stderr='af.stderr',
     inputs=[],
@@ -67,6 +68,8 @@ if __name__ == "__main__":
     # List of run_file_names is from the PW platform form
     run_file_names = pwargs.run_files.split('---')
 
+    n_seeds = int(pwargs.n_seeds)
+
     # Initialize list of Parsl app futures
     runs=[]
 
@@ -79,11 +82,12 @@ if __name__ == "__main__":
     for run_file_name in run_file_names:
 
         run_file = Path(run_file_name)
-
-        r = run_alphafold(
-            inputs = [run_file]+send_files,
-            outputs=[out_dir,Path("af.stdout"),Path("af.stderr")])
-        runs.append(r)
+        for i in range(1,n_seeds+1):
+            r = run_alphafold(
+                random_seed=i,
+                inputs = [run_file]+send_files,
+                outputs=[out_dir,Path("af.stdout"),Path("af.stderr")])
+            runs.append(r)
 
     print("Running",len(runs),"alphafold executions...")
     [r.result() for r in runs]

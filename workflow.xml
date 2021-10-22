@@ -1,9 +1,11 @@
-<tool id='alphafold' name='alphafold'>
+<tool id='hockyg_alphafold' name='hockyg_alphafold'>
   <command interpreter='parsl'>main.py</command>
   <inputs>
     <param name='casename' label='Case Name' type='text' value='Sample text input' width='30%' help='This field does not do anything!'>
     </param>
     <param name='sample_switch' label='(True) / (False)' type='boolean' truevalue='True on left' falsevalue='False on right' width='30%' help='This switch does not do anything!'>
+    </param>
+    <param name='n_seeds' label='Number of parallel seeds' type='integer' min='1' max='10' value='2' width='25%' optional='true'>
     </param>
     <param name='run_files' type='data' multiple='True' label='Fasta files (.fasta)' format='fasta' width='100%'>
     </param>

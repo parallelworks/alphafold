@@ -201,7 +201,7 @@ if __name__ == "__main__":
     parser.add_argument('fasta_file',metavar='fasta_file',type=str,help="Input fasta file")
     parser.add_argument('--alignment_file',type=str,help="Input pre-calculated alignment file in a3m format")
     parser.add_argument('--n_models',type=int,default=5,help="Number of alpha fold models to use (1-5)")
-    parser.add_argument('--n_copies',type=int,default=1,help="Number of random seeds to loop over")
+    parser.add_argument('--seed',type=int,default=1,help="Random seed to use")
     parser.add_argument('--homo_oligomer_copies',type=int,default=1,help="Number of repeats of this sequence in oligomer")
     parser.add_argument('--use_amber',default=False,action='store_true',help="Use openmm/amber for relax")
     parser.add_argument('--no_msa',default=False,action='store_true',help="Don't get an MSA prediction, just use single sequence")
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     fasta_file = args.fasta_file
     fasta_dir = os.path.dirname(fasta_file)
     homooligomer=args.homo_oligomer_copies
-    n_copies = args.n_copies
+    seed = args.seed
 
     name = os.path.splitext(os.path.basename(fasta_file))[0]
     assert os.path.exists(fasta_file), "Fasta file must exist"
@@ -309,10 +309,9 @@ if __name__ == "__main__":
         **template_features
     }
 
-    for seed in range(1,n_copies+1):
-        outs = predict_structure(os.path.join(run_dir,name), feature_dict,
-                             Ls=[len(query_sequence)]*homooligomer,
-                             model_params=model_params, use_model=use_model,
-                             do_relax=args.use_amber, random_seed=seed)
-        pickle.dump(outs, open(os.path.join(run_dir,name)+f'_seed{seed}.result.pickle','wb'))
+    outs = predict_structure(os.path.join(run_dir,name), feature_dict,
+        Ls=[len(query_sequence)]*homooligomer,
+        model_params=model_params, use_model=use_model,
+        do_relax=args.use_amber, random_seed=seed)
+    pickle.dump(outs, open(os.path.join(run_dir,name)+f'_seed{seed}.result.pickle','wb'))
 
