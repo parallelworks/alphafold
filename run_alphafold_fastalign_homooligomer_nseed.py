@@ -122,7 +122,7 @@ def set_bfactor(pdb_filename, bfac, idx_res, chains):
       O.write(f"{line[:21]}{chains[seq_id]}{line[22:60]}{bfac[seq_id]:6.2f}{line[66:]}")
   O.close()
 
-def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_relax=False, random_seed=0):  
+def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_relax=False, random_seed=0):
   """Predicts structure using AlphaFold for the given sequence."""
 
   # Minkyung's code
@@ -132,7 +132,7 @@ def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_rela
   # Ls: number of residues in each chain
   for L_i in Ls[:-1]:
       idx_res[L_prev+L_i:] += 200
-      L_prev += L_i  
+      L_prev += L_i
   chains = list("".join([ascii_uppercase[n]*L for n,L in enumerate(Ls)]))
   feature_dict['residue_index'] = idx_res
 
@@ -144,13 +144,13 @@ def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_rela
 
   for model_name, params in model_params.items():
     if model_name in use_model:
-      print(f"running {model_name}")
+      print(f"running {model_name}, seed {random_seed}")
       # swap params to avoid recompiling
       # note: models 1,2 have diff number of params compared to models 3,4,5
       if any(str(m) in model_name for m in [1,2]): model_runner = model_runner_1
       if any(str(m) in model_name for m in [3,4,5]): model_runner = model_runner_3
       model_runner.params = params
-      
+
       processed_feature_dict = model_runner.process_features(feature_dict, random_seed=random_seed)
       prediction_result = model_runner.predict(processed_feature_dict)
       unrelaxed_protein = protein.from_prediction(processed_feature_dict,prediction_result)
@@ -162,7 +162,7 @@ def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_rela
         # Relax the prediction.
         amber_relaxer = relax.AmberRelaxation(max_iterations=0,tolerance=2.39,
                                               stiffness=10.0,exclude_residues=[],
-                                              max_outer_iterations=20)      
+                                              max_outer_iterations=20)
         relaxed_pdb_str, relax_data, _ = amber_relaxer.process(prot=unrelaxed_protein)
         relaxed_pdb_lines.append(relaxed_pdb_str)
         relaxed_amber_data.append(relax_data)
@@ -176,7 +176,7 @@ def predict_structure(prefix, feature_dict, Ls, model_params, use_model, do_rela
   for n,r in enumerate(lddt_rank):
     print(f"model_{n+1} seed_{random_seed} {np.mean(plddts[r])}")
 
-    unrelaxed_pdb_path = f'{prefix}_unrelaxed_model_{n+1}_seed{random_seed}.pdb'    
+    unrelaxed_pdb_path = f'{prefix}_unrelaxed_model_{n+1}_seed{random_seed}.pdb'
     with open(unrelaxed_pdb_path, 'w') as f: f.write(unrelaxed_pdb_lines[r])
     set_bfactor(unrelaxed_pdb_path, plddts[r]/100, idx_res, chains)
 
@@ -243,10 +243,10 @@ if __name__ == "__main__":
         shutil.copyfile(temp_file,temp_a3m_file)
 
     query_sequence = "".join(open(fasta_file,'r').readlines()[1:]).strip()
-        
+
 
     from string import ascii_uppercase
-    
+
     # collect model weights
     use_model = {}
     if "model_params" not in dir(): model_params = {}

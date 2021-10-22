@@ -47,10 +47,10 @@ def run_alphafold(
     # Use Python 3.6+ f-strings for concise
     # construction of command to run, see:
     # https://realpython.com/python-f-strings/
-    run_command = f"""bash {wrapper_name} {inputs[0]}
+    run_command = f"""bash {wrapper_name} {inputs[0]} {random_seed}
     pdb_files=$(find predictions/ -name '*.pdb')
     for pdb_file in $pdb_files;do
-       bash {render_script} $pdb_file 
+       bash {render_script} $pdb_file
     done
     """
     return run_command
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     parsl.set_file_logger('main.py.log', level=logging.DEBUG)
 
     #out_dir_name = pwargs.out_dir
-    out_dir_name = 'predictions'
+    out_dir_name = 'predictions/'
     out_dir = Path(out_dir_name)
 
     # Create output dir if not already present
