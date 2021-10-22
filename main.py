@@ -42,11 +42,17 @@ def run_alphafold(
     stderr='af.stderr',
     inputs=[],
     outputs=[],
-    wrapper_name="get_alphafold_models.sh"):
+    wrapper_name="get_alphafold_models.sh",
+    render_script="render.greene.sh"):
     # Use Python 3.6+ f-strings for concise
     # construction of command to run, see:
     # https://realpython.com/python-f-strings/
-    run_command = f"bash {wrapper_name} {inputs[0]}"
+    run_command = f"""bash {wrapper_name} {inputs[0]}
+    pdb_files=$(find predictions/ -name '*.pdb')
+    for pdb_file in $pdb_files;do
+       bash {render_script} $pdb_file 
+    done
+    """
     return run_command
 
 #=================================
@@ -73,11 +79,11 @@ if __name__ == "__main__":
     # Initialize list of Parsl app futures
     runs=[]
 
-    # List all .sh and .py files in this workflow directory.
+    # List all .sh, .py, .tcl files in this workflow directory.
     # Later, they will be listed as inputs to a Parsl app
     # which means they will be copied to all workers that
     # run the Parsl app.
-    send_files = [Path(f) for f in glob.glob("*.sh")+glob.glob("*.py")]
+    send_files = [Path(f) for f in glob.glob("*.sh")+glob.glob("*.py")+glob.glob("*.tcl")]
 
     for run_file_name in run_file_names:
 
