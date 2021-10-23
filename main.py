@@ -44,11 +44,13 @@ def run_alphafold(
     inputs=[],
     outputs=[],
     wrapper_name="get_alphafold_models.sh",
-    render_script="render_v2.greene.sh"):
+    render_script="render_v2.greene.sh",
+    runscript="./run-alphafold-20210721.sh"):
     # Use Python 3.6+ f-strings for concise
     # construction of command to run, see:
     # https://realpython.com/python-f-strings/
-    run_command = f"""bash {wrapper_name} {inputs[0]} {random_seed}
+    run_command = f"""#export runscript={runscript}
+    bash {wrapper_name} {inputs[0]} {random_seed}
     pdb_files=$(find predictions/ -name '*.pdb')
     for pdb_file in $pdb_files;do
        bash {render_script} $pdb_file
@@ -63,6 +65,12 @@ def run_alphafold(
 if __name__ == "__main__":
     import glob
     parsl.set_file_logger('main.py.log', level=logging.DEBUG)
+
+    if pwargs.cloud is True:
+        runscript="./run-alphafold-gce.sh"
+    else:
+        runscript="./run-alphafold-20210721.sh"
+
 
     #out_dir_name = pwargs.out_dir
     out_dir_name = 'predictions/'
@@ -91,6 +99,7 @@ if __name__ == "__main__":
         run_file = Path(run_file_name)
         for i in range(1,n_seeds+1):
             r = run_alphafold(
+                runscript=runscript,
                 random_seed=i,
                 inputs = [run_file]+send_files,
                 outputs=[out_dir,Path("af.stdout"),Path("af.stderr")])

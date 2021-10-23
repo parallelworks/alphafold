@@ -3,7 +3,7 @@
   <inputs>
     <param name='casename' label='Case Name' type='text' value='Sample text input' width='30%' help='This field does not do anything!'>
     </param>
-    <param name='sample_switch' label='(True) / (False)' type='boolean' truevalue='True on left' falsevalue='False on right' width='30%' help='This switch does not do anything!'>
+    <param name='cloud' label='Cloud (True) / (False)' type='boolean' truevalue='True' falsevalue='False' width='30%' help='Choose to use cloud verson'>
     </param>
     <param name='n_seeds' label='Number of parallel seeds' type='integer' min='1' max='10' value='2' width='25%' optional='true'>
     </param>
