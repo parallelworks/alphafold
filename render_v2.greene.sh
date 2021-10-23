@@ -17,7 +17,7 @@ if [ ! -e "$pdbfile" ];then
 fi
 
 prefix=$(dirname $pdbfile)/$(basename $pdbfile .pdb)
-sed -e "s,_PDBFILE_,$pdbfile," -e "s,_PREFIX_,$prefix," $template.tcl > render.tcl
+sed -e "s,_PDBFILE_,$pdbfile," -e "s,_PREFIX_,$prefix," $template > render.tcl
 vmd -dispdev none -e render.tcl -args $pdbfile
 convert $prefix.dat.tga $prefix.jpg
 \rm $prefix.dat $prefix.dat.tga
